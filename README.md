@@ -5,7 +5,7 @@ FloatingActionButton
 
 ### Description
 
-Android [Google+] like floating action button which reacts on the list view scrolling events. Becomes visible when the list view is scrolled up and invisible when scrolled down.
+Android [floating action button] which reacts on scrolling events. Becomes visible when an attached target is scrolled up and invisible when scrolled down.
 
 ![Demo](art/demo.gif)
 
@@ -19,7 +19,11 @@ Android [Google+] like floating action button which reacts on the list view scro
 
 ```groovy
 dependencies {
+<<<<<<< HEAD
     compile 'com.acappelli:FloatingActionButton:1.0.7'
+=======
+    compile 'com.melnykov:floatingactionbutton:1.0.9'
+>>>>>>> 1231ace315414725e92cd0d821f49638a56c18fb
 }
 ```
 
@@ -49,18 +53,15 @@ dependencies {
 </FrameLayout>
 ```
 
-**3)** Attach the ``ListView``, ``GridView`` or ``RecyclerView``(currently only the ``LinearLayoutManager`` is supported) to the button in the Java code:
+**3)** Attach the FAB to ``AbsListView``, ``RecyclerView`` or ``ScrollView`` :
 
 ```java
 ListView listView = (ListView) findViewById(android.R.id.list);
 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 fab.attachToListView(listView);
 ```
-``FloatingActionButton`` extends ``android.widget.ImageButton`` so it has all methods the latter has.
 
-If you need custom code to be executed when scrolling events occur, extend ``FloatingActionButton.FabOnScrollListener`` or ``FloatingActionButton.FabRecyclerOnViewScrollListener`` and override ``FabOnScrollListener.onScrollDown()``/`` FabOnScrollListener.onScrollUp()``. Then pass an instance of a custom listener as a second argument to ``attachToListView``/``attachToRecyclerView``.
-
-**Do not forget to call ``super.onScrollDown()`` and ``super.onScrollUp()`` in overriden methods. If you do not, the FAB will not react to scrolling events.**
+Check the sample project to see how to use custom listeners if you need to track scroll events.
 
 **4)** Add the namespace ``xmlns:fab="http://schemas.android.com/apk/res-auto"`` to your layout file.
 
@@ -120,6 +121,20 @@ If you need custom code to be executed when scrolling events occur, extend ``Flo
 
 ### Changelog
 
+**Version 1.0.9:**
++ Support API 7;
++ Fixed extra margins on pre-Lollipop devices;
++ Fixed mini FAB size;
++ Updated shadow assets to more accurately match 8dp elevation.
+
+**Version 1.0.8:**
++ ATTENTION! Breaking changes for custom listeners. Check an updated sample how to use them.
++ Added support for the ``ScrollView``;
++ Significantly optimized scroll detection for the ``RecyclerView``;
++ Fixed laggy animation for a list view with items of different height;
++ Added ``isVisible`` getter;
++ Deleted deprecated methods.
+
 **Version 1.0.7:**
 + Updated shadow assets to better match material design guidlines;
 + Make ``FabOnScrollListener`` and ``FabRecyclerOnViewScrollListener`` implement ``ScrollDirectionListener`` for easier custom listeners usage.
@@ -146,12 +161,16 @@ Thanks to [Aidan Follestad](https://github.com/afollestad).
 
 ### Applications using FloatingActionButton
 
-Please [ping](mailto:makovkastar@gmail.com) me if you would like to be added here.
+Please [ping](mailto:makovkastar@gmail.com) me or send a pull request if you would like to be added here.
 
 Icon | Application
 ------------ | -------------
 <img src="https://lh4.ggpht.com/oA-y_Rnemgoii-kup0MHTU0MjB9YaogVfxFfd9hDgaBysVoe6VL1cg5iNVz2pZPCx6ss=w300-rw" width="48" height="48" /> | [Finger Gesture Launcher]
 <img src="https://lh3.ggpht.com/j5j1fbjO2xqDoI0C4eaVjpQ4K6kxPcSSwOQS_4xihRPKqUKtt5ud1Jd60MAuogyrUQ=w300-rw" width="48" height="48" /> | [Vocabletrainer]
+<img src="https://lh6.ggpht.com/Z40eE1-2KhlE_rSpErTkn8gjU1EOITxTCxNTDWY6EjCi0NAoAN0aUaQ5afmxC-EZqKs=w300-rw" width="48" height="48" /> | [Lanekeep GPS Mileage Tracker]
+<img src="https://lh6.ggpht.com/pTT1RebLeNJMH7pm9XgQtDWpm0azxOJ7dFYkZqAMT-QE1oi2OGor3qI1ZgiJze4uYvo=w300-rw" width="48" height="48" /> | [Score It]
+<img src="https://lh3.ggpht.com/M-AwKN9xIbhoAkHZWEarCasxyNYjJt2gT3HS8ScGYbJWAUi2zSQ2K_tow8lsznB4XhQ=w300-rw" width="48" height="48" /> | [Перезвони мне]
+<img src="https://lh5.ggpht.com/itn5l8TL7g7YJLi-4GlD7Sg4hI-yCZv0NX85S9l5cq8BtDHPYv60S3h3ta75Pjaerg=w300-rw" width="48" height="48" /> | [App Swap]
 
 ### Links
 
@@ -183,8 +202,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-[Google+]:https://play.google.com/store/apps/details?id=com.google.android.apps.plus
+[floating action button]:http://www.google.com/design/spec/components/buttons.html#buttons-floating-action-button
 [guidlines]:http://www.google.com/design/spec/patterns/promoted-actions.html#promoted-actions-floating-action-button
 [Android Asset Studio]:http://romannurik.github.io/AndroidAssetStudio/icons-generic.html
 [Finger Gesture Launcher]:https://play.google.com/store/apps/details?id=com.carlosdelachica.finger
 [Vocabletrainer]:https://play.google.com/store/apps/details?id=com.rubengees.vocables
+[Lanekeep GPS Mileage Tracker]:https://play.google.com/store/apps/details?id=me.hanx.android.dashio&hl=en
+[Score It]:https://play.google.com/store/apps/details?id=com.sbgapps.scoreit
+[Перезвони мне]:https://play.google.com/store/apps/details?id=com.melnykov.callmeback
+[App Swap]:https://play.google.com/store/apps/details?id=net.ebt.appswitch

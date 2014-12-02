@@ -28,6 +28,9 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.view.ViewPropertyAnimator;
+
 /**
  * Android Google+ like floating action button which reacts on the attached list view scrolling events.
  *
@@ -51,7 +54,11 @@ public class FloatingActionButton extends ImageButton {
     private boolean mShadow;
     private int mType;
 
+    private int mShadowSize;
+
     private int mScrollThreshold;
+
+    private boolean mMarginsSet;
 
     private final Interpolator mInterpolator = new AccelerateDecelerateInterpolator();
 
@@ -75,10 +82,27 @@ public class FloatingActionButton extends ImageButton {
         int size = getDimension(
             mType == TYPE_NORMAL ? R.dimen.fab_size_normal : R.dimen.fab_size_mini);
         if (mShadow && !hasLollipopApi()) {
-            int shadowSize = getDimension(R.dimen.fab_shadow_size);
-            size += shadowSize * 2;
+            size += mShadowSize * 2;
         }
         setMeasuredDimension(size, size);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (!hasLollipopApi() && !mMarginsSet) {
+            if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
+                int leftMargin = layoutParams.leftMargin - mShadowSize;
+                int topMargin = layoutParams.topMargin - mShadowSize;
+                int rightMargin = layoutParams.rightMargin - mShadowSize;
+                int bottomMargin = layoutParams.bottomMargin - mShadowSize;
+                layoutParams.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+
+                setLayoutParams(layoutParams);
+                mMarginsSet = true;
+            }
+        }
     }
 
     private void init(Context context, AttributeSet attributeSet) {
@@ -89,6 +113,7 @@ public class FloatingActionButton extends ImageButton {
         mType = TYPE_NORMAL;
         mShadow = true;
         mScrollThreshold = getResources().getDimensionPixelOffset(R.dimen.fab_scroll_threshold);
+        mShadowSize = getDimension(R.dimen.fab_shadow_size);
         if (attributeSet != null) {
             initAttributes(context, attributeSet);
         }
@@ -126,12 +151,10 @@ public class FloatingActionButton extends ImageButton {
         shapeDrawable.getPaint().setColor(color);
 
         if (mShadow && !hasLollipopApi()) {
-            LayerDrawable layerDrawable = new LayerDrawable(
-                new Drawable[]{getResources().getDrawable(R.drawable.shadow),
-                    shapeDrawable});
-            int shadowSize = getDimension(
-                mType == TYPE_NORMAL ? R.dimen.fab_shadow_size : R.dimen.fab_mini_shadow_size);
-            layerDrawable.setLayerInset(1, shadowSize, shadowSize, shadowSize, shadowSize);
+            Drawable shadowDrawable = getResources().getDrawable(mType == TYPE_NORMAL ? R.drawable.shadow
+                : R.drawable.shadow_mini);
+            LayerDrawable layerDrawable = new LayerDrawable(new Drawable[]{shadowDrawable, shapeDrawable});
+            layerDrawable.setLayerInset(1, mShadowSize, mShadowSize, mShadowSize, mShadowSize);
             return layerDrawable;
         } else {
             return shapeDrawable;
@@ -293,11 +316,11 @@ public class FloatingActionButton extends ImageButton {
             }
             int translationY = visible ? 0 : height + getMarginBottom();
             if (animate) {
-                com.nineoldandroids.view.ViewPropertyAnimator.animate(this).setInterpolator(mInterpolator)
+                ViewPropertyAnimator.animate(this).setInterpolator(mInterpolator)
                     .setDuration(TRANSLATE_DURATION_MILLIS)
                     .translationY(translationY);
             } else {
-                com.nineoldandroids.view.ViewHelper.setTranslationY(this, translationY);
+                ViewHelper.setTranslationY(this, translationY);
             }
         }
     }
