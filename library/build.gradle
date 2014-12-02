@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
 
 android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
@@ -20,10 +21,19 @@ android {
     }
 }
 
+publish {
+    userOrg = 'acappelli'
+    groupId = 'com.acappelli'
+    artifactId = 'FloatingActionButton'
+    version = '1.0.9'
+    description = 'Android floating action button which reacts on scrolling events. ' +
+            'Becomes visible when an attached target is scrolled up and invisible when scrolled down.'
+    website = 'https://github.com/acappelli/FloatingActionButton'
+}
+
 dependencies {
     compile 'com.android.support:support-annotations:20.0.0'
     compile 'com.android.support:recyclerview-v7:21.0.0'
     compile 'com.nineoldandroids:library:2.4.0'
 }
 
-apply from: './gradle-mvn-push.gradle'
